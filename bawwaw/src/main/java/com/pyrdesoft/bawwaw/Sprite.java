@@ -5,13 +5,29 @@
  */
 package com.pyrdesoft.bawwaw;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 public class Sprite {
     Image img;
+    double x, y;
     
-    Sprite(String filename) throws SlickException {
-        img = new Image("assets/"+filename);
+    Sprite(double x, double y, Image i) {
+        img = i;
+        this.x = x;
+        this.y = y;
+        Main.getCurrentGameState().allSprites.add(this);
+    }
+    
+    void draw(Graphics g) {
+        g.drawImage(this.img, (float) this.x, (float) this.y);
+    }
+    
+    int getWidth() {
+        return this.img.getWidth();
+    }
+    
+    int getHeight() {
+        return this.img.getHeight();
     }
 }

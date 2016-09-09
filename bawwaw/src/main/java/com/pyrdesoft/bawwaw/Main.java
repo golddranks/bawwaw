@@ -11,6 +11,8 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 public class Main extends BasicGame {
@@ -18,27 +20,45 @@ public class Main extends BasicGame {
     public Main(String gamename) {
         super(gamename);
     }
+    
+    static GameState state;
+    static Block cursor;
+    static Image cursorImgNormal;
+    static Image cursorImgHilite;
 
     @Override
     public void init(GameContainer gc) throws SlickException {
-        buildGameWorld();
+        state = new GameState();
+        state.buildGameWorld();
+        this.cursorImgNormal = new Image("assets/cursor.png");
+        this.cursorImgHilite = new Image("assets/cursor2.png");
+        Sprite cursorSprite = new Sprite(-100.0, -100.0, cursorImgNormal);
+        cursor = new Block(cursorSprite);
     }
 
     @Override
     public void update(GameContainer gc, int i) throws SlickException {
+        Input input = gc.getInput();
+        
+        cursor.sprite.x = input.getMouseX();
+        cursor.sprite.y = input.getMouseY();
+        if (cursor.bb_collides_any(this.state.allBlocks)) {
+            cursor.sprite.img = this.cursorImgHilite;
+        } else {
+            cursor.sprite.img = this.cursorImgNormal;
+        }
+        
+        state.mainChar.update(state);
     }
 
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
-        g.drawString("Howdy!", 40, 10);
+        g.drawString("Howdy!", 40, 40);
+        for( Sprite s : state.allSprites ) {
+            s.draw(g);
+        }
     }
-    
-    void buildGameWorld() throws SlickException {
-        Sprite mainChar = new Sprite("bau.png");
-        
-        Sprite enem = new Sprite("bau.png");
-    }
-
+  
     public static void main(String[] args) {
         try {
             AppGameContainer appgc;
@@ -48,5 +68,9 @@ public class Main extends BasicGame {
         } catch (SlickException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static GameState getCurrentGameState() {
+        return state;
     }
 }
