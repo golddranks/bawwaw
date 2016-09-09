@@ -53,7 +53,7 @@ public class Main extends BasicGame {
 
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
-        g.drawString("Howdy!", 40, 40);
+        g.drawString("Mouse:"+String.valueOf(cursor.sprite.x) + String.valueOf(cursor.sprite.y), 40, 40);
         for( Sprite s : state.allSprites ) {
             s.draw(g);
         }
