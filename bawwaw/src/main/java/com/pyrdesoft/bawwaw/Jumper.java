@@ -16,10 +16,12 @@ public class Jumper {
     double vel_x;
     double vel_y;
     boolean standing;
+    boolean shoot;
             
     Jumper(Sprite s) {
         this.sprite = s;
         this.bbox = new BBox(s.x, s.y, s.getWidth(), s.getHeight());
+        Main.getCurrentGameState().allBlocks.add(bbox);
         Main.getCurrentGameState().allJumpers.add(this);
     }
     
@@ -34,10 +36,15 @@ public class Jumper {
             vel_x = 0;
         if (ctrl.jump && standing)
             vel_y = -5;
+        if (ctrl.shoot)
+            shoot = true;
     }
     
     void update(GameState state) { 
         obeyControls();
+        if (shoot)
+            Bullet.shoot(state.deadBullets, state.liveBullets, bbox.x, bbox.y, 3, 0);
+        shoot = false;
         vel_y += 0.15;
         bbox.y += vel_y;
         bbox.x += vel_x;

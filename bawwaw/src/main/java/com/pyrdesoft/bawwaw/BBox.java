@@ -19,7 +19,6 @@ public class BBox {
         this.y = y;
         this.width = width;
         this.height = height;
-        Main.getCurrentGameState().allBlocks.add(this);
     }
     
     BBox(Sprite sprite){

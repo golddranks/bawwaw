@@ -14,5 +14,5 @@ class Controller {
     boolean left;
     boolean right;
     boolean jump;
-
+    boolean shoot;
 }

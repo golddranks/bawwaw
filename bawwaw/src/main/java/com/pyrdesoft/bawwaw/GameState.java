@@ -6,6 +6,7 @@
 package com.pyrdesoft.bawwaw;
 
 import java.util.ArrayList;
+import java.util.Stack;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -20,6 +21,9 @@ public class GameState {
     ArrayList<Jumper> enemies;
     ArrayList<Sprite> collectables;
     ArrayList<BBox> walls;
+    Stack<Bullet> deadBullets;
+    ArrayList<Bullet> liveBullets;
+    Stack<Bullet> limboBullets;
     
     ArrayList<Sprite> allSprites;
     ArrayList<BBox> allBlocks;
@@ -28,6 +32,9 @@ public class GameState {
     Image enemyImg;
     Image mainCharImg;
     Image platImg;
+    Image bulletImg;
+    
+    BBox world;
     
     Controller playerCtrl;
     
@@ -36,6 +43,9 @@ public class GameState {
         enemies = new ArrayList<Jumper>();
         collectables = new ArrayList<Sprite>();
         walls = new ArrayList<BBox>();
+        deadBullets = new Stack<Bullet>();
+        liveBullets = new ArrayList<Bullet>();
+        limboBullets = new Stack<Bullet>();
         
         allJumpers = new ArrayList<Jumper>();
         allSprites = new ArrayList<Sprite>();
@@ -44,6 +54,8 @@ public class GameState {
         enemyImg = new Image("assets/bau.png");
         mainCharImg = new Image("assets/boyby.png");
         platImg = new Image("assets/plat.png");
+        bulletImg = new Image("assets/bullet.png");
+        world = new BBox(0, 0, 640, 480);
     }
 
     
@@ -64,7 +76,17 @@ public class GameState {
         for (int i = 0; i < 10; i++) {
             Sprite wallSpr = new Sprite(Math.random() * 500, Math.random() * 500, platImg);
             BBox wall = new BBox(wallSpr.x, wallSpr.y, wallSpr.getWidth(), wallSpr.getHeight());
+            Main.getCurrentGameState().allBlocks.add(wall);
             walls.add(wall);
+        }
+
+
+
+
+        
+        for (int i = 0; i < 100; i++) { // TODO there is only limited amount of bullets
+            Bullet bullet = new Bullet(bulletImg);
+            deadBullets.push(bullet);
         }
     }
 
@@ -72,12 +94,15 @@ public class GameState {
         playerCtrl.jump = false;
         playerCtrl.left = false;
         playerCtrl.right = false;
+        playerCtrl.shoot = false;
         if (input.isKeyDown(Input.KEY_LEFT ))
             playerCtrl.left = true;
         if (input.isKeyDown(Input.KEY_RIGHT))
             playerCtrl.right = true;
         if (input.isKeyDown(Input.KEY_SPACE))
             playerCtrl.jump = true;
+        if (input.isKeyDown(Input.KEY_ENTER))
+            playerCtrl.shoot = true;
     }
 
 }

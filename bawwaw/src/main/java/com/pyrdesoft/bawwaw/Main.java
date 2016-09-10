@@ -57,6 +57,7 @@ public class Main extends BasicGame {
         for (Jumper j : state.allJumpers) {
             j.update(state);
         }
+        Bullet.updateAllBullets(state);
     }
 
     @Override
@@ -65,6 +66,12 @@ public class Main extends BasicGame {
         for( Sprite s : state.allSprites ) {
             s.draw(g);
         }
+        for( Bullet b : state.liveBullets) {
+            b.draw(g);
+        }
+        
+        
+        
     }
   
     public static void main(String[] args) {
