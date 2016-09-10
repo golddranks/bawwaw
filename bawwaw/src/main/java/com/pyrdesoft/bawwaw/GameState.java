@@ -84,7 +84,7 @@ public class GameState {
 
 
         
-        for (int i = 0; i < 100; i++) { // TODO there is only limited amount of bullets
+        for (int i = 0; i < 1000; i++) { // TODO there is only limited amount of bullets
             Bullet bullet = new Bullet(bulletImg);
             deadBullets.push(bullet);
         }

@@ -62,13 +62,16 @@ public class Main extends BasicGame {
 
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
-        g.drawString("Mouse:"+String.valueOf(cursorBox.x) + String.valueOf(cursorBox.y), 40, 40);
         for( Sprite s : state.allSprites ) {
             s.draw(g);
         }
         for( Bullet b : state.liveBullets) {
             b.draw(g);
         }
+        g.drawString("Mouse:"+String.valueOf(cursorBox.x) + String.valueOf(cursorBox.y), 40, 40);
+        g.drawString("LEFT RIGHT SPACE ENTER", 40, 100);
+        
+        
         
         
         
