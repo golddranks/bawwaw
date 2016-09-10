@@ -28,6 +28,8 @@ public class GameState {
     
     ArrayList<Sprite> renderSprites;
     ArrayList<Jumper> liveJumpers;
+    Stack<HitBox> limboHitBoxes;
+    ArrayList<HitBox> liveHitBoxes;
     
     Image enemyImg;
     Image mainCharImg;
@@ -49,6 +51,8 @@ public class GameState {
         limboBullets = new Stack<Bullet>();
         
         liveJumpers = new ArrayList<Jumper>();
+        liveHitBoxes = new ArrayList<HitBox>();
+        limboHitBoxes = new Stack<HitBox>();
         renderSprites = new ArrayList<Sprite>();
         
         enemyImg = new Image("assets/bau.png");
@@ -71,14 +75,13 @@ public class GameState {
         for (int i = 0; i < 30; i++) {
             Sprite baddieSpr = new Sprite(Math.random() * 500, Math.random()*500, enemyImg);
             Jumper baddie = new Jumper(baddieSpr);
-            HitBox baddieHitBox = new HitBox(10, baddie.bbox);
-            enemies.add(baddie);
+            HitBox baddieHitBox = new HitBox(2, baddie.bbox, baddie);
+            liveHitBoxes.add(baddieHitBox);
         }
         
         for (int i = 0; i < 30; i++) {
             Sprite slackySpr = new Sprite(Math.random() * 500, Math.random()*500, slackyImg);
             Jumper slacky = new Jumper(slackySpr);
-            enemies.add(slacky);
         }
         
         for (int i = 0; i < 10; i++) {
@@ -106,9 +109,9 @@ public class GameState {
             playerCtrl.left = true;
         if (input.isKeyDown(Input.KEY_RIGHT))
             playerCtrl.right = true;
-        if (input.isKeyDown(Input.KEY_SPACE))
+        if (input.isKeyDown(Input.KEY_Z))
             playerCtrl.jump = true;
-        if (input.isKeyDown(Input.KEY_ENTER))
+        if (input.isKeyDown(Input.KEY_X))
             playerCtrl.shoot = true;
     }
 

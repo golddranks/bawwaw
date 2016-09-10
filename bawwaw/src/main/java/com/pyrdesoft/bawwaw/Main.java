@@ -62,8 +62,8 @@ public class Main extends BasicGame {
         for (Jumper j : state.liveJumpers) {
             j.update(state, delta);
         }
-        Bullet.updateAllBullets(state, delta);
-        
+        Bullet.updateAll(state, delta);
+        HitBox.updateAll(state);
     }
 
     @Override

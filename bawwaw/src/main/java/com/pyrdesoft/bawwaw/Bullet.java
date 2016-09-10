@@ -15,10 +15,12 @@ public class Bullet {
     Image img;
     BBox box;
     double x_vel, y_vel;
-    
+    int damage;
+    boolean gotHit;
     Bullet(Image img) {
         this.img = img;
         box = new BBox(0, 0, img.getWidth(), img.getHeight());
+        gotHit = false;
     }
     
     
@@ -34,17 +36,30 @@ public class Bullet {
         bullet.y_vel = y_vel;
         bullet.box.x = x;
         bullet.box.y = y;
+        bullet.damage = 1;
+        bullet.gotHit = false;
     }
     
     void update(GameState gs, double delta) {
         box.x += x_vel*delta;
         box.y += y_vel*delta;
         if (!box.bb_collides(gs.world)) {
-            gs.limboBullets.push(this);
+            getHit(gs);
+        }
+        if (box.bb_collides_any(gs.walls)) {
+            getHit(gs);
         }
     }
     
-    static void updateAllBullets(GameState state, double delta) {
+    void getHit(GameState gs) {
+        if (!gotHit) { // Ensures that limboBullets contains only one ref to bullet
+                        // even if getHit() is called multiple times for the same bullet
+            gs.limboBullets.push(this);
+        }
+        gotHit = true;
+    }
+    
+    static void updateAll(GameState state, double delta) {
         for( Bullet b : state.liveBullets) {
             b.update(state, delta);
         }

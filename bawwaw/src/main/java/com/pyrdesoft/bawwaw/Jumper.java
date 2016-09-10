@@ -9,7 +9,7 @@ package com.pyrdesoft.bawwaw;
  *
  * @author drasa
  */
-public class Jumper {
+public class Jumper implements Destroyable {
     Sprite sprite;
     BBox bbox;
     Controller ctrl;
@@ -19,6 +19,7 @@ public class Jumper {
     double shootState;
     boolean shoot;
     int faceDir;
+    
             
     Jumper(Sprite s) {
         this.sprite = s;
@@ -65,5 +66,11 @@ public class Jumper {
             vel_y *= -0.2; // TODO
             standing = true;
         }
+    }
+
+    @Override
+    public void destroy(GameState state) {
+        state.liveJumpers.remove(this);
+        state.renderSprites.remove(this.sprite);
     }
 }
