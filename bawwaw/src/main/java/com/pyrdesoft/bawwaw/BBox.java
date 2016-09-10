@@ -9,7 +9,8 @@ import java.util.ArrayList;
 
 /**
  *
- * @author drasa
+ * @author Pyry Kontio
+ * A simple Bounding Box implementation
  */
 public class BBox {
     double x, y, width, height;

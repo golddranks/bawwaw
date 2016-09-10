@@ -16,7 +16,7 @@ public class Sprite {
         img = i;
         this.x = x;
         this.y = y;
-        Main.getCurrentGameState().allSprites.add(this);
+        Main.getCurrentGameState().renderSprites.add(this);
     }
     
     void draw(Graphics g) {

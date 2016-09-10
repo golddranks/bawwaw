@@ -5,7 +5,6 @@
  */
 package com.pyrdesoft.bawwaw;
 
-import static com.pyrdesoft.bawwaw.Main.state;
 import java.util.ArrayList;
 import java.util.Stack;
 import org.newdawn.slick.Graphics;
@@ -37,17 +36,17 @@ public class Bullet {
         bullet.box.y = y;
     }
     
-    void update(GameState gs) {
-        box.x += x_vel;
-        box.y += y_vel;
+    void update(GameState gs, double delta) {
+        box.x += x_vel*delta;
+        box.y += y_vel*delta;
         if (!box.bb_collides(gs.world)) {
             gs.limboBullets.push(this);
         }
     }
     
-    static void updateAllBullets(GameState state) {
+    static void updateAllBullets(GameState state, double delta) {
         for( Bullet b : state.liveBullets) {
-            b.update(state);
+            b.update(state, delta);
         }
         while( !state.limboBullets.empty() ) {
             Bullet b = state.limboBullets.pop();

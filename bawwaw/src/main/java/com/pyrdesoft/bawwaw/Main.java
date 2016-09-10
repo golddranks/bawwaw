@@ -26,6 +26,8 @@ public class Main extends BasicGame {
     static Sprite cursorSprite;
     static Image cursorImgNormal;
     static Image cursorImgHilite;
+    
+    double lastDelta;
 
     @Override
     public void init(GameContainer gc) throws SlickException {
@@ -41,7 +43,7 @@ public class Main extends BasicGame {
         cursorBox.x = input.getMouseX() - cursorSprite.getWidth()/2;
         cursorBox.y = input.getMouseY() - cursorSprite.getHeight()/2;
         cursorSprite.updateFrom(cursorBox);
-        if (cursorBox.bb_collides_any(this.state.allBlocks)) {
+        if (cursorBox.bb_collides_any(this.state.walls)) {
             cursorSprite.img = this.cursorImgHilite;
         } else {
             cursorSprite.img = this.cursorImgNormal;
@@ -49,20 +51,24 @@ public class Main extends BasicGame {
     }
 
     @Override
-    public void update(GameContainer gc, int i) throws SlickException {
+    public void update(GameContainer gc, int delta_ms) throws SlickException {
         Input input = gc.getInput();
+        
+        double delta = (double) delta_ms / 1000;
+        lastDelta = delta;
         
         updateCursor(input);
         state.updatePlayerController(input);
-        for (Jumper j : state.allJumpers) {
-            j.update(state);
+        for (Jumper j : state.liveJumpers) {
+            j.update(state, delta);
         }
-        Bullet.updateAllBullets(state);
+        Bullet.updateAllBullets(state, delta);
+        
     }
 
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
-        for( Sprite s : state.allSprites ) {
+        for( Sprite s : state.renderSprites ) {
             s.draw(g);
         }
         for( Bullet b : state.liveBullets) {
@@ -70,6 +76,7 @@ public class Main extends BasicGame {
         }
         g.drawString("Mouse:"+String.valueOf(cursorBox.x) + String.valueOf(cursorBox.y), 40, 40);
         g.drawString("LEFT RIGHT SPACE ENTER", 40, 100);
+        g.drawString(String.valueOf(lastDelta), 40, 120);
         
         
         
