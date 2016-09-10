@@ -45,7 +45,7 @@ public class Jumper {
         sprite.updateFrom(bbox);
         if (bbox.bb_collides_any(state.walls)) {
             bbox.y -= vel_y;
-            vel_y *= -0.5; // TODO
+            vel_y *= -0.3; // TODO
             standing = true;
         }
     }
