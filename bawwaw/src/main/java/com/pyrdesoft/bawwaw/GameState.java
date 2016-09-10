@@ -7,6 +7,7 @@ package com.pyrdesoft.bawwaw;
 
 import java.util.ArrayList;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 /**
@@ -16,25 +17,29 @@ import org.newdawn.slick.SlickException;
 public class GameState {
     
     Jumper mainChar; 
-    ArrayList<Sprite> enemies;
+    ArrayList<Jumper> enemies;
     ArrayList<Sprite> collectables;
-    ArrayList<Block> walls;
+    ArrayList<BBox> walls;
     
     ArrayList<Sprite> allSprites;
-    ArrayList<Block> allBlocks;
+    ArrayList<BBox> allBlocks;
+    ArrayList<Jumper> allJumpers;
     
     Image enemyImg;
     Image mainCharImg;
     Image platImg;
     
+    Controller playerCtrl;
+    
     GameState() throws SlickException {
         
-        enemies = new ArrayList<Sprite>();
+        enemies = new ArrayList<Jumper>();
         collectables = new ArrayList<Sprite>();
-        walls = new ArrayList<Block>();
+        walls = new ArrayList<BBox>();
         
+        allJumpers = new ArrayList<Jumper>();
         allSprites = new ArrayList<Sprite>();
-        allBlocks = new ArrayList<Block>();
+        allBlocks = new ArrayList<BBox>();
         
         enemyImg = new Image("assets/bau.png");
         mainCharImg = new Image("assets/boyby.png");
@@ -46,18 +51,33 @@ public class GameState {
         
         Sprite mainCharSprite = new Sprite(100, 100, mainCharImg);
         mainChar = new Jumper(mainCharSprite);
+        playerCtrl = new Controller();
+        mainChar.ctrl = playerCtrl;
         
         
         for (int i = 0; i < 100; i++) {
-            Sprite baddie = new Sprite(Math.random() * 500, Math.random()*500, enemyImg);
+            Sprite baddieSpr = new Sprite(Math.random() * 500, Math.random()*500, enemyImg);
+            Jumper baddie = new Jumper(baddieSpr);
             enemies.add(baddie);
         }
         
         for (int i = 0; i < 10; i++) {
             Sprite wallSpr = new Sprite(Math.random() * 500, Math.random() * 500, platImg);
-            Block wall = new Block(wallSpr);
+            BBox wall = new BBox(wallSpr.x, wallSpr.y, wallSpr.getWidth(), wallSpr.getHeight());
             walls.add(wall);
         }
+    }
+
+    void updatePlayerController(Input input) {
+        playerCtrl.jump = false;
+        playerCtrl.left = false;
+        playerCtrl.right = false;
+        if (input.isKeyDown(Input.KEY_LEFT ))
+            playerCtrl.left = true;
+        if (input.isKeyDown(Input.KEY_RIGHT))
+            playerCtrl.right = true;
+        if (input.isKeyDown(Input.KEY_SPACE))
+            playerCtrl.jump = true;
     }
 
 }

@@ -22,7 +22,8 @@ public class Main extends BasicGame {
     }
     
     static GameState state;
-    static Block cursor;
+    static BBox cursorBox;
+    static Sprite cursorSprite;
     static Image cursorImgNormal;
     static Image cursorImgHilite;
 
@@ -30,30 +31,37 @@ public class Main extends BasicGame {
     public void init(GameContainer gc) throws SlickException {
         state = new GameState();
         state.buildGameWorld();
-        this.cursorImgNormal = new Image("assets/cursor.png");
-        this.cursorImgHilite = new Image("assets/cursor2.png");
-        Sprite cursorSprite = new Sprite(-100.0, -100.0, cursorImgNormal);
-        cursor = new Block(cursorSprite);
+        cursorImgNormal = new Image("assets/cursor.png");
+        cursorImgHilite = new Image("assets/cursor2.png");
+        cursorSprite = new Sprite(0, 0, cursorImgNormal);
+        cursorBox = new BBox(cursorSprite);
+    }
+    
+    void updateCursor(Input input) {
+        cursorBox.x = input.getMouseX() - cursorSprite.getWidth()/2;
+        cursorBox.y = input.getMouseY() - cursorSprite.getHeight()/2;
+        cursorSprite.updateFrom(cursorBox);
+        if (cursorBox.bb_collides_any(this.state.allBlocks)) {
+            cursorSprite.img = this.cursorImgHilite;
+        } else {
+            cursorSprite.img = this.cursorImgNormal;
+        }
     }
 
     @Override
     public void update(GameContainer gc, int i) throws SlickException {
         Input input = gc.getInput();
         
-        cursor.sprite.x = input.getMouseX();
-        cursor.sprite.y = input.getMouseY();
-        if (cursor.bb_collides_any(this.state.allBlocks)) {
-            cursor.sprite.img = this.cursorImgHilite;
-        } else {
-            cursor.sprite.img = this.cursorImgNormal;
+        updateCursor(input);
+        state.updatePlayerController(input);
+        for (Jumper j : state.allJumpers) {
+            j.update(state);
         }
-        
-        state.mainChar.update(state);
     }
 
     @Override
     public void render(GameContainer gc, Graphics g) throws SlickException {
-        g.drawString("Mouse:"+String.valueOf(cursor.sprite.x) + String.valueOf(cursor.sprite.y), 40, 40);
+        g.drawString("Mouse:"+String.valueOf(cursorBox.x) + String.valueOf(cursorBox.y), 40, 40);
         for( Sprite s : state.allSprites ) {
             s.draw(g);
         }
@@ -62,8 +70,10 @@ public class Main extends BasicGame {
     public static void main(String[] args) {
         try {
             AppGameContainer appgc;
-            appgc = new AppGameContainer(new Main("Simple Slick Game"));
+            appgc = new AppGameContainer(new Main("BAWWAW"));
             appgc.setDisplayMode(640, 480, false);
+            appgc.setVSync(true);
+            appgc.setTargetFrameRate(60);
             appgc.start();
         } catch (SlickException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

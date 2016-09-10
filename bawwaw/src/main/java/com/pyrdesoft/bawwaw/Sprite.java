@@ -30,4 +30,9 @@ public class Sprite {
     int getHeight() {
         return this.img.getHeight();
     }
+    
+    void updateFrom(BBox box) {
+        x = box.x;
+        y = box.y;
+    } 
 }
