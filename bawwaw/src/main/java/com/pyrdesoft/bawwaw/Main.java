@@ -75,7 +75,7 @@ public class Main extends BasicGame {
             b.draw(g);
         }
         g.drawString("Mouse:"+String.valueOf(cursorBox.x) + String.valueOf(cursorBox.y), 40, 40);
-        g.drawString("LEFT RIGHT SPACE ENTER", 40, 100);
+        g.drawString("LEFT RIGHT, Z=JUMP X=SHOOT", 40, 100);
         g.drawString(String.valueOf(lastDelta), 40, 120);
         
         
